@@ -1,0 +1,293 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Fresh Tomatoes!</title>
+
+    <!-- Bootstrap 3 -->
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap-theme.min.css">
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+    <style type="text/css" media="screen">
+        body {
+            padding-top: 80px;
+        }
+        #trailer .modal-dialog {
+            margin-top: 200px;
+            width: 640px;
+            height: 480px;
+        }
+        .hanging-close {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            z-index: 9001;
+        }
+        #trailer-video {
+            width: 100%;
+            height: 100%;
+        }
+        .movie-tile, .tvshow-tile {
+            margin-bottom: 20px;
+            padding-top: 20px;
+        }
+        .movie-tile:hover , .tvshow-tile:hover {
+            background-color: #EEE;
+            cursor: pointer;
+        }
+        .scale-media {
+            padding-bottom: 56.25%;
+            position: relative;
+        }
+        .scale-media iframe {
+            border: none;
+            height: 100%;
+            position: absolute;
+            width: 100%;
+            left: 0;
+            top: 0;
+            background-color: white;
+        }
+
+        fieldset, label { margin: 0; padding: 0; }
+        body{ margin: 20px; }
+        h1 { font-size: 1.5em; margin: 10px; }
+
+        /****** Style Star Rating Widget *****/
+
+        .rating { 
+          border: none;
+          float: left;
+        }
+
+        .rating > input { display: none; } 
+        .rating > label:before { 
+          margin: 5px;
+          font-size: 1.25em;
+          font-family: FontAwesome;
+          display: inline-block;
+          content: "\f005";
+        }
+
+        .rating > .half:before { 
+          content: "\f089";
+          position: absolute;
+        }
+
+        .rating > label { 
+          color: #ddd; 
+         float: right; 
+        }
+
+        /***** CSS Magic to Highlight Stars on Hover *****/
+
+        .rating > input:checked ~ label, /* show gold star when clicked */
+        .rating:not(:checked) > label:hover, /* hover current star */
+        .rating:not(:checked) > label:hover ~ label { color: #FFD700;  } /* hover previous stars in list */
+
+        .rating > input:checked + label:hover, /* hover current star when changing rating */
+        .rating > input:checked ~ label:hover,
+        .rating > label:hover ~ input:checked ~ label, /* lighten current selection */
+        .rating > input:checked ~ label:hover ~ label { color: #FFED85;  } 
+ </style>
+ 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script type="text/javascript" charset="utf-8">
+        // Pause the video when the modal is closed
+        $(document).on('click', '.hanging-close, .modal-backdrop, .modal', function (event) {
+            // Remove the src so the player itself gets removed, as this is the only
+            // reliable way to ensure the video stops playing in IE
+            $("#trailer-video-container").empty();
+        });
+        // Start playing the video whenever the trailer modal is opened
+        $(document).on('click', '.movie-tile', function (event) {
+            var trailerYouTubeId = $(this).attr('data-trailer-youtube-id')
+            var sourceUrl = 'http://www.youtube.com/embed/' + trailerYouTubeId + '?autoplay=1&html5=1';
+            console.log(sourceUrl)
+            $("#trailer-video-container").empty().append($("<iframe></iframe>", {
+              'id': 'trailer-video',
+              'type': 'text-html',
+              'src': sourceUrl,
+              'frameborder': 0
+            }));
+        });
+        // Animate in the movies when the page loads
+        $(document).ready(function () {
+          $('.movie-tile').hide().first().show("fast", function showNext() {
+            $(this).next("div").show("fast", showNext);
+          });
+          $('.tvshow-tile').hide().first().show("fast", function showNext() {
+            $(this).next("div").show("fast", showNext);
+          });
+          $('[data-toggle="tooltip"]').tooltip();   
+        });
+        // Start playing the video whenever the trailer modal is opened
+        $(document).on('click', '.tvshow-tile', function (event) {
+            var trailerYouTubeId = $(this).attr('data-trailer-youtube-id')
+            var sourceUrl = 'http://www.youtube.com/embed/' + trailerYouTubeId + '?autoplay=1&html5=1';
+            console.log(sourceUrl)
+            $("#trailer-video-container").empty().append($("<iframe></iframe>", {
+              'id': 'trailer-video',
+              'type': 'text-html',
+              'src': sourceUrl,
+              'frameborder': 0
+            }));
+        });
+        $("label").click(function(){
+          $(this).parent().find("label").css({"background-color": "#D8D8D8"});
+          $(this).css({"background-color": "#7ED321"});
+          $(this).nextAll().css({"background-color": "#7ED321"});
+        });
+    </script>
+</head>
+
+  <body>
+    <!-- Trailer Video Modal -->
+    <div class="modal" id="trailer">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <a href="#" class="hanging-close" data-dismiss="modal" aria-hidden="true">
+            <img src="https://lh5.ggpht.com/v4-628SilF0HtHuHdu5EzxD7WRqOrrTIDi_MhEG6_qkNtUK5Wg7KPkofp_VJoF7RS2LhxwEFCO1ICHZlc-o_=s0#w=24&h=24"/>
+          </a>
+          <div class="scale-media" id="trailer-video-container">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Page Content -->
+    <div class="container">
+      <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">Fresh Tomatoes Movie Trailers</a>
+          </div>
+        </div>
+      </div>
+    </div>
+   
+    <div class="container">
+     <a class="navbar-brand">Movies</a>
+      <br /><br />
+     <div class="container">
+      
+<div class="col-md-6 col-lg-4 movie-tile text-center" data-trailer-youtube-id="KYz2wyBy3kc" data-toggle="modal" data-target="#trailer">
+    <img src="https://vignette.wikia.nocookie.net/disney/images/8/80/Toy_Story_-_Poster.jpg/revision/latest?cb=20150108180742" width="220" height="342">
+    <a data-toggle="tooltip" data-placement="top" title="Duration: 95 mins"></a>
+    <h2>Toy Story</h2>
+    <fieldset class="rating">
+            <input type="radio" id="toy_story_star5" name="toy_story_rating1" value="5" /><label class = "full" for="toy_story_star5"></label>
+            <input type="radio" id="toy_story_star4" name="toy_story_rating1" value="4" /><label class = "full" for="toy_story_star4"></label>
+            <input type="radio" id="toy_story_star3" name="toy_story_rating1" value="3" /><label class = "full" for="toy_story_star3"></label>
+            <input type="radio" id="toy_story_star2" name="toy_story_rating1" value="2" /><label class = "full" for="toy_story_star2"></label>
+            <input type="radio" id="toy_story_star1" name="toy_story_rating1" value="1" /><label class = "full" for="toy_story_star1"></label>
+    </fieldset>
+</div>
+
+<div class="col-md-6 col-lg-4 movie-tile text-center" data-trailer-youtube-id="5PSNL1qE6VY" data-toggle="modal" data-target="#trailer">
+    <img src="https://vignette.wikia.nocookie.net/jamescameronsavatar/images/6/6c/Avatar_Poster.jpg/revision/latest?cb=20100105110229" width="220" height="342">
+    <a data-toggle="tooltip" data-placement="top" title="Duration: 90mins"></a>
+    <h2>Avatar</h2>
+    <fieldset class="rating">
+            <input type="radio" id="avatar_star5" name="avatar_rating1" value="5" /><label class = "full" for="avatar_star5"></label>
+            <input type="radio" id="avatar_star4" name="avatar_rating1" value="4" /><label class = "full" for="avatar_star4"></label>
+            <input type="radio" id="avatar_star3" name="avatar_rating1" value="3" /><label class = "full" for="avatar_star3"></label>
+            <input type="radio" id="avatar_star2" name="avatar_rating1" value="2" /><label class = "full" for="avatar_star2"></label>
+            <input type="radio" id="avatar_star1" name="avatar_rating1" value="1" /><label class = "full" for="avatar_star1"></label>
+    </fieldset>
+</div>
+
+<div class="col-md-6 col-lg-4 movie-tile text-center" data-trailer-youtube-id="89Kq8SDyvfg" data-toggle="modal" data-target="#trailer">
+    <img src="http://www.impawards.com/2006/posters/pursuit_of_happyness.jpg" width="220" height="342">
+    <a data-toggle="tooltip" data-placement="top" title="Duration: 100 mins"></a>
+    <h2>The Pursuit of Happyness</h2>
+    <fieldset class="rating">
+            <input type="radio" id="persuit_star5" name="persuit_rating1" value="5" /><label class = "full" for="persuit_star5"></label>
+            <input type="radio" id="persuit_star4" name="persuit_rating1" value="4" /><label class = "full" for="persuit_star4"></label>
+            <input type="radio" id="persuit_star3" name="persuit_rating1" value="3" /><label class = "full" for="persuit_star3"></label>
+            <input type="radio" id="persuit_star2" name="persuit_rating1" value="2" /><label class = "full" for="persuit_star2"></label>
+            <input type="radio" id="persuit_star1" name="persuit_rating1" value="1" /><label class = "full" for="persuit_star1"></label>
+    </fieldset>
+</div>
+
+<div class="col-md-6 col-lg-4 movie-tile text-center" data-trailer-youtube-id="ALUmKa_mpik" data-toggle="modal" data-target="#trailer">
+    <img src="https://vignette.wikia.nocookie.net/disney/images/c/c8/Ratatouille_poster.jpg/revision/latest?cb=20130328084644" width="220" height="342">
+    <a data-toggle="tooltip" data-placement="top" title="Duration: 85 mins"></a>
+    <h2>Ratatouille</h2>
+    <fieldset class="rating">
+            <input type="radio" id="ratatouille_star5" name="ratatouille_rating1" value="5" /><label class = "full" for="ratatouille_star5"></label>
+            <input type="radio" id="ratatouille_star4" name="ratatouille_rating1" value="4" /><label class = "full" for="ratatouille_star4"></label>
+            <input type="radio" id="ratatouille_star3" name="ratatouille_rating1" value="3" /><label class = "full" for="ratatouille_star3"></label>
+            <input type="radio" id="ratatouille_star2" name="ratatouille_rating1" value="2" /><label class = "full" for="ratatouille_star2"></label>
+            <input type="radio" id="ratatouille_star1" name="ratatouille_rating1" value="1" /><label class = "full" for="ratatouille_star1"></label>
+    </fieldset>
+</div>
+
+<div class="col-md-6 col-lg-4 movie-tile text-center" data-trailer-youtube-id="QRmKa7vvct4" data-toggle="modal" data-target="#trailer">
+    <img src="http://www.impawards.com/2016/posters/angry_birds.jpg" width="220" height="342">
+    <a data-toggle="tooltip" data-placement="top" title="Duration: 80 mins"></a>
+    <h2>The Angry Birds</h2>
+    <fieldset class="rating">
+            <input type="radio" id="angry_star5" name="angry_rating1" value="5" /><label class = "full" for="angry_star5"></label>
+            <input type="radio" id="angry_star4" name="angry_rating1" value="4" /><label class = "full" for="angry_star4"></label>
+            <input type="radio" id="angry_star3" name="angry_rating1" value="3" /><label class = "full" for="angry_star3"></label>
+            <input type="radio" id="angry_star2" name="angry_rating1" value="2" /><label class = "full" for="angry_star2"></label>
+            <input type="radio" id="angry_star1" name="angry_rating1" value="1" /><label class = "full" for="angry_star1"></label>
+    </fieldset>
+</div>
+
+<div class="col-md-6 col-lg-4 movie-tile text-center" data-trailer-youtube-id="O7zvehDxttM" data-toggle="modal" data-target="#trailer">
+    <img src="http://www.impawards.com/2002/posters/spiderman_ver1.jpg" width="220" height="342">
+    <a data-toggle="tooltip" data-placement="top" title="Duration: 100 mins"></a>
+    <h2>Spider-Man</h2>
+    <fieldset class="rating">
+            <input type="radio" id="spiderman_star5" name="spiderman_rating1" value="5" /><label class = "full" for="spiderman_star5"></label>
+            <input type="radio" id="spiderman_star4" name="spiderman_rating1" value="4" /><label class = "full" for="spiderman_star4"></label>
+            <input type="radio" id="spiderman_star3" name="spiderman_rating1" value="3" /><label class = "full" for="spiderman_star3"></label>
+            <input type="radio" id="spiderman_star2" name="spiderman_rating1" value="2" /><label class = "full" for="spiderman_star2"></label>
+            <input type="radio" id="spiderman_star1" name="spiderman_rating1" value="1" /><label class = "full" for="spiderman_star1"></label>
+    </fieldset>
+</div>
+
+      </div>
+    <div class="container">
+      <a class="navbar-brand">TV Shows</a>
+      <br /><br /> <br /><br />
+     </div>
+     <div class="container">
+      
+<div class="col-md-6 col-lg-4 tvshow-tile text-center" data-trailer-youtube-id="dHh_ddv-dBE" data-toggle="modal" data-target="#trailer">
+    <img src="http://www.gstatic.com/tv/thumb/tvbanners/7892827/p7892827_b_v8_aa.jpg" width="220" height="342">
+    <a data-toggle="tooltip" data-placement="top" title="Duration: 60 mins"></a>
+    <h2>SeinFeld</h2>
+    <h4>Season 1 Episode 1</h4>
+    <fieldset class="rating">
+            <input type="radio" id="seinfeld_star5" name="seinfeld_rating1" value="5" /><label class = "full" for="seinfeld_star5"></label>
+            <input type="radio" id="seinfeld_star4" name="seinfeld_rating1" value="4" /><label class = "full" for="seinfeld_star4"></label>
+            <input type="radio" id="seinfeld_star3" name="seinfeld_rating1" value="3" /><label class = "full" for="seinfeld_star3"></label>
+            <input type="radio" id="seinfeld_star2" name="seinfeld_rating1" value="2" /><label class = "full" for="seinfeld_star2"></label>
+            <input type="radio" id="seinfeld_star1" name="seinfeld_rating1" value="1" /><label class = "full" for="seinfeld_star1"></label>
+    </fieldset>
+</div>
+
+<div class="col-md-6 col-lg-4 tvshow-tile text-center" data-trailer-youtube-id="HhesaQXLuRY" data-toggle="modal" data-target="#trailer">
+    <img src="https://vignette.wikia.nocookie.net/breakingbad/images/a/af/Season_4_Poster_3.jpg" width="220" height="342">
+    <a data-toggle="tooltip" data-placement="top" title="Duration: 45 mins"></a>
+    <h2>Breaking Bad</h2>
+    <h4>Season 5 Episode 8</h4>
+    <fieldset class="rating">
+            <input type="radio" id="breaking_bad_star5" name="breaking_bad_rating1" value="5" /><label class = "full" for="breaking_bad_star5"></label>
+            <input type="radio" id="breaking_bad_star4" name="breaking_bad_rating1" value="4" /><label class = "full" for="breaking_bad_star4"></label>
+            <input type="radio" id="breaking_bad_star3" name="breaking_bad_rating1" value="3" /><label class = "full" for="breaking_bad_star3"></label>
+            <input type="radio" id="breaking_bad_star2" name="breaking_bad_rating1" value="2" /><label class = "full" for="breaking_bad_star2"></label>
+            <input type="radio" id="breaking_bad_star1" name="breaking_bad_rating1" value="1" /><label class = "full" for="breaking_bad_star1"></label>
+    </fieldset>
+</div>
+
+      </div>
+    </div>
+  </body>
+</html>
