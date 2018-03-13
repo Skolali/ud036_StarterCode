@@ -23,4 +23,5 @@ This project uses a number of open source projects to work properly:
 * [Python] - server side code
 * [HTML] - To create UI
 * [CSS] - To make UI beautiful
+* Used third party font-awesome.css for star rating
 
